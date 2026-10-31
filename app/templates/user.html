@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICIKIWIR SHOWROOM - Used Car & Motorcycle Dealer</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --lime-accent: #a3e635;
+            --lime-hover: #84cc16;
+            --dark-bg: #0f172a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--dark-bg);
+            padding: 1rem 2rem;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #ffffff !important;
+            letter-spacing: -0.5px;
+        }
+        .navbar-brand span {
+            color: var(--lime-accent);
+        }
+        .nav-link {
+            color: #cbd5e1 !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #ffffff !important;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: white;
+            padding: 4rem 2rem 6rem 2rem;
+            position: relative;
+        }
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .hero-title span {
+            color: var(--lime-accent);
+        }
+        .btn-lime {
+            background-color: var(--lime-accent);
+            color: #0f172a;
+            font-weight: 700;
+            border-radius: 30px;
+            padding: 0.6rem 1.5rem;
+            border: none;
+        }
+        .btn-lime:hover {
+            background-color: var(--lime-hover);
+            color: #0f172a;
+        }
+        .btn-outline-custom {
+            border: 1px solid #475569;
+            color: white;
+            border-radius: 30px;
+            padding: 0.6rem 1.5rem;
+        }
+
+        /* Search Bar Floating */
+        .search-box {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            margin-top: -3rem;
+            padding: 1.25rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Product Card */
+        .card-vehicle {
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            background: white;
+        }
+        .card-vehicle:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .card-img-container {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            background-color: #e2e8f0;
+        }
+        .card-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .badge-fav {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            color: white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .badge-type {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+        }
+        .badge-car {
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+        .badge-moto {
+            background-color: #fef9c3;
+            color: #a16207;
+        }
+
+        /* Feature Badges */
+        .features-box {
+            background: #f1f5f9;
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        .icon-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--lime-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">ICIKIWIR <span>SHOWROOM </span></a>
+            <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link active" href="{{ url_for('dashboard') }}">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard', jenis='Mobil') }}">Mobil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard', jenis='Motor') }}">Motor</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    {% if user_name %}
+                        <span class="text-white me-2">Halo, <strong>{{ user_name }}</strong></span>
+                        <a href="{{ url_for('logout') }}" class="btn btn-outline-custom btn-sm">Logout</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-custom btn-sm"><i class="bi bi-person me-1"></i> Masuk</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <small class="text-uppercase tracking-wider text-light opacity-75 fw-semibold">Jual Beli Mobil & Motor Bekas</small>
+                    <h1 class="hero-title mt-2 mb-3">Temukan Kendaraan <span>Impianmu</span></h1>
+                    <p class="text-light opacity-75 mb-4">Mobil & motor bekas berkualitas, terasa seperti baru.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#katalog" class="btn btn-lime"><i class="bi bi-search me-1"></i> Jelajahi Kendaraan</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800" class="img-fluid rounded-4 shadow-lg" alt="Showroom Vehicle" style="max-height: 320px; object-fit: cover;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FORM FILTER PENCARIAN -->
+    <div class="container">
+        <div class="search-box">
+            <form action="{{ url_for('dashboard') }}" method="GET" class="row g-3 align-items-center">
+                <div class="col-md-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-car-front fs-4 text-muted"></i>
+                        <div class="w-100">
+                            <label class="form-label mb-0 text-muted small fw-semibold">Jenis Kendaraan</label>
+                            <select name="jenis" class="form-select border-0 p-0 fw-bold">
+                                <option value="Semua Jenis" {% if selected_jenis == 'Semua Jenis' %}selected{% endif %}>Semua Jenis</option>
+                                <option value="Mobil" {% if selected_jenis == 'Mobil' %}selected{% endif %}>Mobil</option>
+                                <option value="Motor" {% if selected_jenis == 'Motor' %}selected{% endif %}>Motor</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-tags fs-4 text-muted"></i>
+                        <div class="w-100">
+                            <label class="form-label mb-0 text-muted small fw-semibold">Merek</label>
+                            <select name="merek" class="form-select border-0 p-0 fw-bold">
+                                <option value="Semua Merek" {% if selected_merek == 'Semua Merek' %}selected{% endif %}>Semua Merek</option>
+                                <option value="Toyota" {% if selected_merek == 'Toyota' %}selected{% endif %}>Toyota</option>
+                                <option value="Honda" {% if selected_merek == 'Honda' %}selected{% endif %}>Honda</option>
+                                <option value="Yamaha" {% if selected_merek == 'Yamaha' %}selected{% endif %}>Yamaha</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-currency-dollar fs-4 text-muted"></i>
+                        <div class="w-100">
+                            <label class="form-label mb-0 text-muted small fw-semibold">Rentang Harga</label>
+                            <select name="harga" class="form-select border-0 p-0 fw-bold">
+                                <option value="Semua Harga" {% if selected_harga == 'Semua Harga' %}selected{% endif %}>Semua Harga</option>
+                                <option value="< Rp 100 Juta" {% if selected_harga == '< Rp 100 Juta' %}selected{% endif %}>< Rp 100 Juta</option>
+                                <option value="Rp 100M - 300M" {% if selected_harga == 'Rp 100M - 300M' %}selected{% endif %}>Rp 100M - 300M</option>
+                                <option value="> Rp 300 Juta" {% if selected_harga == '> Rp 300 Juta' %}selected{% endif %}>> Rp 300 Juta</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-lime w-100 py-2"><i class="bi bi-search me-1"></i> Cari Kendaraan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- NOTIFIKASI FLASH -->
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- KATALOG UTAMA -->
+    <section id="katalog" class="container my-5">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h3 class="fw-bold mb-1">Pilihan Terbaik Minggu Ini</h3>
+                <p class="text-muted mb-0">Unit pilihan dengan kualitas terbaik, siap menemani perjalanan Anda.</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- MOBIL -->
+            {% if cars %}
+                {% for car in cars %}
+                <div class="col-md-6 col-lg-3">
+                    <div class="card card-vehicle h-100">
+                        <div class="card-img-container">
+                            <img src="{{ car.image_url if car.image_url else 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=500' }}" alt="{{ car.title }}">
+                            <div class="badge-fav"><i class="bi bi-heart"></i></div>
+                        </div>
+                        <div class="card-body d-flex flex-column justify-content-between p-3">
+                            <div>
+                                <h6 class="fw-bold mb-1 text-truncate">{{ car.title }}</h6>
+                                <p class="text-muted small mb-2"><i class="bi bi-check-circle-fill text-success me-1"></i> Ready Stock</p>
+                            </div>
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="fw-bold text-dark mb-0">Rp {{ "{:,.0f}".format(car.price) }}</h6>
+                                    <span class="badge badge-type badge-car">Mobil</span>
+                                </div>
+                                <form action="{{ url_for('buy_vehicle', type='car', item_id=car.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-sm btn-lime w-100 fw-bold">Beli Sekarang</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- MOTOR -->
+            {% if motorcycles %}
+                {% for moto in motorcycles %}
+                <div class="col-md-6 col-lg-3">
+                    <div class="card card-vehicle h-100">
+                        <div class="card-img-container">
+                            <img src="{{ moto.image_url if moto.image_url else 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=500' }}" alt="{{ moto.title }}">
+                            <div class="badge-fav"><i class="bi bi-heart"></i></div>
+                        </div>
+                        <div class="card-body d-flex flex-column justify-content-between p-3">
+                            <div>
+                                <h6 class="fw-bold mb-1 text-truncate">{{ moto.title }}</h6>
+                                <p class="text-muted small mb-2"><i class="bi bi-check-circle-fill text-success me-1"></i> Ready Stock</p>
+                            </div>
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="fw-bold text-dark mb-0">Rp {{ "{:,.0f}".format(moto.price) }}</h6>
+                                    <span class="badge badge-type badge-moto">Motor</span>
+                                </div>
+                                <form action="{{ url_for('buy_vehicle', type='motorcycle', item_id=moto.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-sm btn-lime w-100 fw-bold">Beli Sekarang</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- JIKA KOSONG -->
+            {% if not cars and not motorcycles %}
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-inbox fs-1 text-muted"></i>
+                    <p class="text-muted mt-2">Tidak ada kendaraan yang sesuai dengan kriteria pencarian Anda.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- KEUNGGULAN SHOWROOM -->
+        <div class="features-box mt-5">
+            <div class="row g-4 text-start">
+                <div class="col-md-4 d-flex align-items-center gap-3">
+                    <div class="icon-circle"><i class="bi bi-shield-check"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Unit Terinspeksi</h6>
+                        <small class="text-muted">Setiap kendaraan telah melalui proses inspeksi untuk memastikan kualitas terbaik.</small>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-center gap-3">
+                    <div class="icon-circle"><i class="bi bi-file-earmark-text"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Dokumen Terjamin</h6>
+                        <small class="text-muted">BPKB, STNK, dan dokumen lainnya lengkap dan aman.</small>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex align-items-center gap-3">
+                    <div class="icon-circle"><i class="bi bi-headset"></i></div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Bantuan Profesional</h6>
+                        <small class="text-muted">Tim kami siap membantu Anda dari proses pencarian hingga transaksi selesai.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JS Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
